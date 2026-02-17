@@ -5,12 +5,14 @@ import Place from "@/models/Place";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const place = await Place.findById(params.id);
+    const { id } = await params; // ✅ await params
+
+    const place = await Place.findById(id);
 
     if (!place) {
       return NextResponse.json(
