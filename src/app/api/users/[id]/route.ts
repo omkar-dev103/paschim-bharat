@@ -5,12 +5,14 @@ import User from "@/models/User";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const user = await User.findOne({ uid: params.id })
+    const { id } = await params; // ✅ await params
+
+    const user = await User.findOne({ uid: id })
       .populate("bookmarks")
       .populate("tripsPlanned");
 
@@ -32,15 +34,17 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
 
     await connectDB();
 
+    const { id } = await params; // ✅ await params
+
     const user = await User.findOneAndUpdate(
-      { uid: params.id },
+      { uid: id },
       { $set: body },
       { new: true, runValidators: true }
     );
