@@ -1,23 +1,16 @@
 // src/store/authStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { User } from "firebase/auth";
-
-interface UserData {
-  uid: string;
-  name: string;
-  email: string;
-  profilePicture: string;
-  bookmarks: string[];
-}
+import { User as FirebaseUser } from "firebase/auth";
+import { User } from "@/types"; // ✅ import your real User type
 
 interface AuthState {
-  user: User | null;
-  userData: UserData | null;
+  user: FirebaseUser | null;
+  userData: User | null; // ✅ use real User type
   isLoading: boolean;
   isAuthenticated: boolean;
-  setUser: (user: User | null) => void;
-  setUserData: (userData: UserData | null) => void;
+  setUser: (user: FirebaseUser | null) => void;
+  setUserData: (userData: User | null) => void;
   setLoading: (loading: boolean) => void;
   logout: () => void;
   addBookmark: (placeId: string) => void;
